@@ -53,8 +53,7 @@ async function handleIncomingMessage(message: Message) {
 
 	const selfNotedMessage = message.fromMe && message.hasQuotedMsg === false && message.from === message.to;
 	const whitelistedPhoneNumbers = getConfig("general", "whitelist");
-
-	if (!selfNotedMessage && whitelistedPhoneNumbers.length > 0 && !whitelistedPhoneNumbers.includes(message.from)) {
+	if (!selfNotedMessage && whitelistedPhoneNumbers.length > 0 && !whitelistedPhoneNumbers.includes(message.from.split('@')[0])) {
 		cli.print(`Ignoring message from ${message.from} because it is not whitelisted.`);
 		return;
 	}
