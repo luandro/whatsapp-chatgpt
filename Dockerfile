@@ -25,5 +25,6 @@ RUN npm install
 RUN npm install vite-node
 
 COPY . .
+RUN mkdir -p /root/.config && touch /root/.config/WhatsAppAI.db
 
 CMD ["npm", "run", "start"]

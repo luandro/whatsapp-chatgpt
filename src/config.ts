@@ -68,9 +68,10 @@ export const config: IConfig = {
 	openAIModel: process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo", // Default: gpt-3.5-turbo
 	maxModelTokens: getEnvMaxModelTokens(), // Default: 4096
 	prePrompt: process.env.PRE_PROMPT, // Default: undefined
-	gitBooks:
+	gitBooks: getCommaSeparatedAsArray(
 		process.env.GITBOOKS ||
-		"https://docs.mapeo.app,https://docs.terrastories.app/,https://digital-democracy.org/,https://earthdefenderstoolkit.com/,https://docs.earthdefenderstoolkit.com",
+			"https://docs.mapeo.app,https://docs.terrastories.app/,https://digital-democracy.org/,https://earthdefenderstoolkit.com/,https://docs.earthdefenderstoolkit.com"
+	),
 	braveAPIKey: process.env.BRAKE_API_KEY,
 	// Prefix
 	prefixEnabled: getEnvBooleanWithDefault("PREFIX_ENABLED", true), // Default: true
@@ -123,6 +124,10 @@ function getEnvMaxModelTokens() {
 	}
 
 	return parseInt(envValue);
+}
+
+function getCommaSeparatedAsArray(envValue: string): Array {
+	return envValue.split(",");
 }
 
 /**
