@@ -60,11 +60,20 @@ async function fetchAndSaveFile(gitBooks, filePath) {
 		console.error("Error fetching or saving the file:", error);
 	}
 }
-
-const getVectorStore = async (appName, gitBooks, xDays = 7) => {
-	const filePath = path.join(configDir, appName + ".db");
+function createFileSync(filePath) {
+	const folderPath = path.dirname(filePath);
+	if (!fs.existsSync(folderPath)) {
+		fs.mkdirSync(folderPath, { recursive: true });
+	}
 	if (!fs.existsSync(filePath)) {
 		fs.writeFileSync(filePath, "", { flag: "w" });
+	}
+}
+
+const getVectorStore = async (appName, gitBooks, xDays = 7) => {
+	const filePath = path.join(configDir, appName, "gitbooks.db");
+	if (!fs.existsSync(filePath)) {
+		createFileSync(filePath);
 	}
 	if (isUpToDate(filePath, xDays)) {
 		console.log("File is less than", xDays, "days old. No need to fetch again.");
