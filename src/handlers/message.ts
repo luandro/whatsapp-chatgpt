@@ -115,8 +115,8 @@ async function handleIncomingMessage(message: Message) {
 	}
 
 	// GPT (only <prompt>)
-	if (!config.prefixEnabled || (config.prefixSkippedForMe && selfNotedMessage)) {
-		await handleMessageGPT(message, messageString);
+	if (!config.prefixEnabled || (config.prefixSkippedForMe)) {
+		await handleMessageGPT(message, messageString, 'qaChain');
 		return;
 	}
 }
