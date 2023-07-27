@@ -74,7 +74,7 @@ export async function initQAChain() {
 				- {translated link title}: {untouched link url}
 				- {translated link title}: {untouched link url}
 
-				Translate to portuguese and make text better without changing the contents or links:
+				Translate to ${config.transcriptionLanguage} and make text better without changing the contents or links:
 				${queryReponse}
 			`)
 			console.log('RES', translatedResponse)
