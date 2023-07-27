@@ -17,7 +17,7 @@ let botReadyTimestamp: Date | null = null;
 
 // Entrypoint
 const start = async () => {
-	initQAChain();
+	await initQAChain();
 	cli.printIntro();
 
 	// WhatsApp Client
