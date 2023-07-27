@@ -11,6 +11,10 @@ import { handleIncomingMessage } from "./handlers/message";
 import { initQAChain } from "./providers/qa-chain";
 import { initAiConfig } from "./handlers/ai-config";
 import { initOpenAI } from "./providers/openai";
+// import { initEmbedchain } from './providers/embedchain'
+// import { initReactiveAgent } from './providers/reactive-agent'
+
+const DEV = process.env.DEV;
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -19,7 +23,6 @@ let botReadyTimestamp: Date | null = null;
 const start = async () => {
 	await initQAChain();
 	cli.printIntro();
-
 	// WhatsApp Client
 	const client = new Client({
 		puppeteer: {
@@ -93,7 +96,13 @@ const start = async () => {
 	});
 
 	// WhatsApp initialization
-	client.initialize();
+	if (!DEV) {
+		client.initialize();
+	} else {
+		// initReactiveAgent();
+		initAiConfig();
+		initOpenAI();
+	}
 };
 
 start();
