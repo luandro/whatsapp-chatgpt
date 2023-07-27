@@ -16,10 +16,24 @@ import { TTSMode } from "../types/tts-mode";
 import { moderateIncomingPrompt } from "./moderation";
 import { aiConfig, getConfig } from "./ai-config";
 
+// Custom
+import { qaChain } from "../providers/qa-chain";
+// import { reactiveAgent } from "../providers/reactive-agent";
+
 // Mapping from number to last conversation id
 const conversations = {};
 
-const handleMessageGPT = async (message: Message, prompt: string) => {
+function chooseExecutor(provider, prompt, lastConversationId) {
+	switch (provider) {
+		case 'qa-chain':
+			return qaChain(prompt)
+		// case 'reactive-agent':
+		// 	return reactiveAgent(prompt)
+		default:
+			return chatgpt.ask(prompt, lastConversationId)
+	}
+}
+const handleMessageGPT = async (message: Message, prompt: string, provider?: string) => {
 	try {
 		// Get last conversation
 		const lastConversationId = conversations[message.from];
@@ -42,7 +56,7 @@ const handleMessageGPT = async (message: Message, prompt: string) => {
 		let response: string;
 		if (lastConversationId) {
 			// Handle message with previous conversation
-			response = await chatgpt.ask(prompt, lastConversationId);
+			response = await chooseExecutor('qa-chain', prompt, lastConversationId)
 		} else {
 			// Create new conversation
 			const convId = randomUUID();
@@ -59,9 +73,7 @@ const handleMessageGPT = async (message: Message, prompt: string) => {
 				const prePromptResponse = await chatgpt.ask(config.prePrompt, conv.id);
 				cli.print("[GPT] Pre prompt response: " + prePromptResponse);
 			}
-
-			// Handle message with new conversation
-			response = await chatgpt.ask(prompt, conv.id);
+			response = await chooseExecutor('qa-chain', prompt, conv.id)
 		}
 
 		const end = Date.now() - start;

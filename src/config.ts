@@ -12,12 +12,16 @@ dotenv.config();
 interface IConfig {
 	// Access control
 	whitelistedPhoneNumbers: string[];
-    whitelistedEnabled: boolean;
+	whitelistedEnabled: boolean;
 	// OpenAI
 	openAIModel: string;
 	openAIAPIKeys: string[];
 	maxModelTokens: number;
 	prePrompt: string | undefined;
+
+	// Custom
+	gitBooks: string | undefined;
+	braveApiKey: string | undefined;
 
 	// Prefix
 	prefixEnabled: boolean;
@@ -58,14 +62,17 @@ interface IConfig {
 // Config
 export const config: IConfig = {
 	whitelistedPhoneNumbers: process.env.WHITELISTED_PHONE_NUMBERS?.split(",") || [],
-    whitelistedEnabled: getEnvBooleanWithDefault("WHITELISTED_ENABLED", false),
-
+	whitelistedEnabled: getEnvBooleanWithDefault("WHITELISTED_ENABLED", false),
 
 	openAIAPIKeys: (process.env.OPENAI_API_KEYS || process.env.OPENAI_API_KEY || "").split(",").filter((key) => !!key), // Default: []
 	openAIModel: process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo", // Default: gpt-3.5-turbo
 	maxModelTokens: getEnvMaxModelTokens(), // Default: 4096
 	prePrompt: process.env.PRE_PROMPT, // Default: undefined
-
+	gitBooks: getCommaSeparatedAsArray(
+		process.env.GITBOOKS ||
+			"https://docs.mapeo.app,https://docs.terrastories.app/,https://digital-democracy.org/,https://earthdefenderstoolkit.com/,https://docs.earthdefenderstoolkit.com"
+	),
+	braveAPIKey: process.env.BRAKE_API_KEY,
 	// Prefix
 	prefixEnabled: getEnvBooleanWithDefault("PREFIX_ENABLED", true), // Default: true
 	prefixSkippedForMe: getEnvBooleanWithDefault("PREFIX_SKIPPED_FOR_ME", true), // Default: true
@@ -117,6 +124,10 @@ function getEnvMaxModelTokens() {
 	}
 
 	return parseInt(envValue);
+}
+
+function getCommaSeparatedAsArray(envValue: string): Array {
+	return envValue.split(",");
 }
 
 /**

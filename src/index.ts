@@ -1,6 +1,5 @@
 import qrcode from "qrcode-terminal";
 import { Client, Message, Events, LocalAuth } from "whatsapp-web.js";
-
 // Constants
 import constants from "./constants";
 
@@ -9,16 +8,21 @@ import * as cli from "./cli/ui";
 import { handleIncomingMessage } from "./handlers/message";
 
 // Config
+import { initQAChain } from "./providers/qa-chain";
 import { initAiConfig } from "./handlers/ai-config";
 import { initOpenAI } from "./providers/openai";
+// import { initEmbedchain } from './providers/embedchain'
+// import { initReactiveAgent } from './providers/reactive-agent'
+
+const DEV = process.env.DEV;
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
 
 // Entrypoint
 const start = async () => {
+	await initQAChain();
 	cli.printIntro();
-
 	// WhatsApp Client
 	const client = new Client({
 		puppeteer: {
@@ -92,7 +96,13 @@ const start = async () => {
 	});
 
 	// WhatsApp initialization
-	client.initialize();
+	if (!DEV) {
+		client.initialize();
+	} else {
+		// initReactiveAgent();
+		initAiConfig();
+		initOpenAI();
+	}
 };
 
 start();
