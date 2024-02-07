@@ -6,16 +6,23 @@
 	"author": "Askrella Software Agency UG (haftungsbeschränkt)",
 	"scripts": {
 		"start": "npx vite-node src/index.ts",
+		"test": "npx vite-node test.ts",
 		"prettier": "prettier --write ./src"
 	},
 	"license": "MIT",
 	"dependencies": {
-		"aws-sdk": "^2.1467.0",
+		"@langchain/cohere": "^0.0.2",
+		"@langchain/community": "^0.0.21",
+		"@langchain/openai": "^0.0.13",
+		"aws-sdk": "^2.1545.0",
 		"chatgpt": "^5.2.5",
-		"dotenv": "^16.3.1",
+		"cheerio": "^1.0.0-rc.12",
+		"cohere-ai": "^7.7.3",
+		"dotenv": "^16.4.1",
 		"fetch-blob": "^4.0.0",
 		"ffmpeg": "^0.0.4",
-		"langchain": "^0.0.156",
+		"hnswlib-node": "^1.4.2",
+		"langchain": "^0.1.8",
 		"openai": "^3.3.0",
 		"picocolors": "^1.0.0",
 		"qrcode": "^1.5.3",
@@ -25,7 +32,7 @@
 		"node": ">=18.0.0"
 	},
 	"devDependencies": {
-		"@types/qrcode": "^1.5.2",
-		"prettier": "^3.0.3"
+		"@types/qrcode": "^1.5.5",
+		"prettier": "^3.2.4"
 	}
 }
